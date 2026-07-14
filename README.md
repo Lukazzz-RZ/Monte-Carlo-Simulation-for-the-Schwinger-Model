@@ -1,4 +1,4 @@
-# Schwinger Worm
+# Monte Carlo Simulation of the Dual Schwinger Model
 
 [Español](README_ES.md)
 
