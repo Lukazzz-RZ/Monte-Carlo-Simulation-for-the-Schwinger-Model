@@ -1,0 +1,25 @@
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+# CMake / MSVC build products
+build/
+out/
+x64/
+Debug/
+Release/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.exe
+*.obj
+*.pdb
+*.ilk
+# Generated numerical data
+Results/
+# Temporary files
+*.tmp
+*.log
