@@ -1,29 +1,25 @@
-# Visual Studio
+# IDE
 .vs/
-x64/
-Debug/
-Release/
+.vscode/
 *.user
 *.suo
 *.VC.db
 *.VC.VC.opendb
-
-# CMake
+# CMake / MSVC build products
 build/
 out/
+x64/
+Debug/
+Release/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-
-# Compilacion
 *.exe
 *.obj
 *.pdb
 *.ilk
-
-# Resultados de simulacion
+# Generated numerical data
 Results/
-
-# Archivos temporales
+# Temporary files
 *.tmp
 *.log
