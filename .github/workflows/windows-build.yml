@@ -14,3 +14,7 @@ jobs:
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
       - name: Build
         run: cmake --build build --config Release
+
+      - name: Bounded Monte Carlo smoke test
+        shell: pwsh
+        run: ./scripts/smoke-test.ps1
