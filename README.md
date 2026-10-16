@@ -1,118 +1,89 @@
-# Monte Carlo Simulation of the Dual Schwinger Model
+# Monte Carlo simulation of the dual Schwinger model
 
-[Español](README_ES.md)
+[Versión en español](README_ES.md)
 
-C implementation for simulating the dual representation of the Schwinger
-model in 1+1 dimensions using plaquette updates and worm algorithms.
+C implementation of Monte Carlo updates for a dual monomer–dimer–loop representation of the **Schwinger model in 1+1 dimensions**, developed as part of a Bachelor's thesis in Physics at the University of Zaragoza (2025–2026).
 
-> Work in progress associated with a Bachelor's Thesis.
+The project investigates how gauge and fermionic observables depend on the fermion mass, coupling and topological angle. The dual representation uses plaquette occupation numbers, fermionic loops, dimers and (for nonzero mass) monomers. Negative weights in the massive case are handled through sign reweighting in subsequent analysis.
 
-## Requirements
+> **Research software:** This repository contains simulation code. The numerical implementation and its scientific interpretation should be assessed together with the thesis; a successful build alone is not a validation of the Monte Carlo results.
 
-- Windows 10 or 11.
-- Visual Studio 2022 with C support.
-- CMake 3.20 or later.
+## Implementation
 
-## Project structure
+- Local plaquette updates and open/closed worm updates.
+- Measurements of plaquette, dimer density, topological-response estimator, monomer density and chiral-condensate estimator.
+- Per-configuration sign and sign-weighted measurements written to text files.
+- Thermalisation records and parameter sweeps.
 
-```text
-SchwingerWorm/
-|-- CMakeLists.txt
-|-- include/
-|   `-- Lattice.h
-|-- src/
-|   |-- Main.c
-|   |-- Initializer.c
-|   |-- UpdCore.c
-|   |-- Plaq_mod.c
-|   |-- Worm_ferm.c
-|   |-- Measures.c
-|   |-- Visualizer.c
-|   `-- Other.c
-`-- Results/
-```
+The code currently builds for **Windows with Visual Studio 2022 / MSVC**. It uses Windows-specific routines, including `rand_s`, `_mkdir`, and `Sleep`; Linux/macOS builds are **not** supported by this version.
 
-## Build
+## Build (Windows)
 
-Open a Visual Studio terminal in the project directory and run:
+Install **Visual Studio 2022 with Desktop development with C++** (including the MSVC C compiler and Windows SDK) and **CMake 3.20+**.
+
+Open a Developer PowerShell or Developer Command Prompt, at the repository root:
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
 ```
 
-The executable is usually generated at:
-
-```text
-build/Release/SchwingerWorm.exe
-```
-
-## Usage
-
-Run:
+The executable will be at `build/Release/SchwingerWorm.exe`. Run it **from the repository root** so that the output files are written to `Results/`:
 
 ```powershell
 .\build\Release\SchwingerWorm.exe
 ```
 
-At startup, the program displays a menu with the following options:
+**Important:** The current `src/Main.c` is *not* menu-driven. Running the executable starts the configured parameter sweep immediately; the default production settings are expensive.
 
-1. Quick test.
-2. Theta sweep.
-3. Mass sweep.
-4. Mass-theta plane.
-5. Single point.
-6. Exit.
+## Current default run
 
-Each option shows the loaded parameters, number of simulation series,
-thermalization steps, number of measurements, and spacing between
-measurements.
+Parameters are set in `src/Main.c` and lattice dimensions in `include/Lattice.h`. At the time of writing, the checked-in defaults are:
 
-The selected option must be confirmed with `y` or cancelled with `n`.
+| Setting | Value |
+| --- | --- |
+| Lattice | `Nx = Nt = 10` (in `include/Lattice.h`) |
+| Gauge coupling | `beta = 10` |
+| Fermion mass | `m/g = 1` |
+| Topological angle | `theta/pi = 0, 0.25, ..., 2` |
+| Thermalisation | 100,000 Monte Carlo steps **per parameter point** |
+| Measurements | 50,176 per parameter point |
+| Steps between measurements | 10 |
 
-## Monte Carlo step
+To run a smaller experiment, **edit the constants in `src/Main.c` and rebuild**. One Monte Carlo step consists of a plaquette sweep, `max(1, V/10)` worm attempts and a second plaquette sweep.
 
-Each Monte Carlo step contains:
-
-1. One complete sequential plaquette sweep.
-2. `max(1, V / 10)` worm attempts.
-3. A second complete sequential plaquette sweep.
+The pseudo-random-number generator is seeded with the current time. The executable does **not** currently expose a fixed-seed option, so bit-for-bit reproducibility across runs is not guaranteed. The measurements are output as raw numerical samples, not as a final jackknife analysis.
 
 ## Output
 
-Results are stored automatically in:
+When executed from the repository root, the program creates a `Results/` directory and writes:
+
+- `Series_*.dat`: simulation metadata; one row per measurement containing the Monte Carlo step, ten observables, configuration sign and ten sign-weighted observables.
+- `Thermalization_*.txt`: time-series records for the average plaquette and dimer density, sampled during thermalisation.
+
+The sign-weighted columns permit reweighting; statistical uncertainties and nonlinear observables require appropriate separate post-processing. The topological-response code reports `q` and `q^2`; these should not automatically be interpreted as a complete estimator of the free-energy curvature susceptibility without its explicit derivative contribution.
+
+## Repository layout
 
 ```text
-Results/
+.
+├── CMakeLists.txt
+├── include/
+│   └── Lattice.h
+├── src/
+│   ├── Main.c
+│   ├── Initializer.c
+│   ├── UpdCore.c
+│   ├── Plaq_mod.c
+│   ├── Worm_ferm.c
+│   ├── Measures.c
+│   ├── Visualizer.c
+│   └── Other.c
+└── README_ES.md
 ```
 
-Files named `Series_*.dat` contain:
+## Thesis and scope
 
-- measured observables;
-- the configuration sign;
-- products between the sign and each observable for reweighting.
+**Worm Algorithms for the Schwinger Model**, Bachelor's thesis in Physics, University of Zaragoza (2025–2026). The repository does not yet include the thesis PDF or the full set of figures. Links to public institutional or arXiv records can be added once available.
 
-Files named `Thermalization_*.txt` contain the evolution of:
-
-- the average plaquette;
-- the dimer density.
-
-## Configuration
-
-General lattice parameters are defined in:
-
-```text
-include/Lattice.h
-```
-
-The simulation presets shown in the menu are defined in:
-
-```text
-src/Main.c
-```
-
-## Status
-
-The code is currently under development. The full thesis and academic
-documentation will be published after the evaluation process has been
-completed.
+This work is based on established dual lattice formulations; the repository documents the implementation and numerical investigation, not a claim to have introduced the dual representation itself.
