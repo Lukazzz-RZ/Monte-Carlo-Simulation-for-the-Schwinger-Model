@@ -8,6 +8,12 @@ La formulación dual utiliza ocupaciones de plaqueta, lazos fermiónicos, dímer
 
 > **Software de investigación:** poder compilar el programa no constituye, por sí solo, una validación científica de los resultados Monte Carlo.
 
+## Resultado representativo del TFG
+
+![Densidad de respuesta topológica frente al ángulo para cuatro masas fermiónicas](docs/figures/topological_response.svg)
+
+*Gráfica ilustrativa basada en los datos del TFG: respuesta topológica frente a θ/π para cuatro valores de m/g, con β = 14,4 y V = 12 × 12. Para facilitar la lectura se representa un punto de cada dos y se omiten las barras de incertidumbre; véase la memoria para los errores y su interpretación. [Datos de la vista previa](docs/data/topological_response_preview.csv). Estos resultados pertenecen al TFG y no corresponden a la prueba automática con los parámetros actuales del repositorio.*
+
 ## Funcionalidad
 
 - Actualizaciones locales de plaqueta y algoritmos de gusano abierto y cerrado.

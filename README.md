@@ -8,6 +8,12 @@ The project investigates how gauge and fermionic observables depend on the fermi
 
 > **Research software:** This repository contains simulation code. The numerical implementation and its scientific interpretation should be assessed together with the thesis; a successful build alone is not a validation of the Monte Carlo results.
 
+## Representative thesis result
+
+![Topological response density versus topological angle, for four fermion masses](docs/figures/topological_response.svg)
+
+*Illustrative plot from the bachelor's thesis data: topological-response density versus θ/π, for four values of m/g, at β = 14.4 and V = 12 × 12. To keep the overview readable, only every second point is shown and the uncertainty bars are omitted; see the full thesis for uncertainties and interpretation. [Preview data](docs/data/topological_response_preview.csv). These are thesis results, not a validation run of the exact default configuration in this repository.*
+
 ## Implementation
 
 - Local plaquette updates and open/closed worm updates.
