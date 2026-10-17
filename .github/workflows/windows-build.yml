@@ -18,3 +18,4 @@ jobs:
       - name: Bounded Monte Carlo smoke test
         shell: pwsh
         run: ./scripts/smoke-test.ps1
+

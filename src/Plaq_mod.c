@@ -540,3 +540,4 @@ bool plaq_update(void)
 
     return selected_plaq_update(t0, x0);
 }
+

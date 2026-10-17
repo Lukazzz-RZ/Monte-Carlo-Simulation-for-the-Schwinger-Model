@@ -279,3 +279,4 @@ void plot_obs(const char *spec)
     fflush(gnuplot);
     pclose(gnuplot);
 }
+

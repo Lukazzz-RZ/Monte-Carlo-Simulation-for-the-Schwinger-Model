@@ -130,3 +130,4 @@ void thermalizate(int n_steps, const char *spec)
 
     printf("Termalizacion terminada.\n\n");
 }
+

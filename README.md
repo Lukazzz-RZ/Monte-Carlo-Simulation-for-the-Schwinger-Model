@@ -79,3 +79,4 @@ CMakeLists.txt Windows/MSVC build
 This repository accompanies **_Worm Algorithms for the Schwinger Model_**, a Bachelor's thesis in Physics at the University of Zaragoza (2025–2026). The dual formulation builds on previous lattice-field-theory literature; the purpose of this repository is to share the implementation and numerical study.
 
 A public link to the complete thesis in the university repository or arXiv can be added after deposition.
+

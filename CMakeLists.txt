@@ -33,3 +33,4 @@ set_target_properties(SchwingerWorm PROPERTIES
 # Microsoft's rand_s declaration is enabled by this preprocessor definition.
 target_compile_definitions(SchwingerWorm PRIVATE _CRT_RAND_S)
 target_compile_options(SchwingerWorm PRIVATE /W3)
+

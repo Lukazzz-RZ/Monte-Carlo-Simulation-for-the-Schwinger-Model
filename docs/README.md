@@ -12,3 +12,4 @@ This folder contains figures and numerical values used to illustrate the Schwing
 - [Topological-response data](data/topological_response_preview.csv): rounded values used to produce the overview figures.
 
 The figures are based on thesis results for a 12 × 12 lattice at β = 14.4. They are illustrations of previously obtained data, not new runs of the current default program settings. Statistical uncertainties are not shown in these overview figures; consult the full thesis for their analysis and interpretation.
+

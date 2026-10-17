@@ -295,3 +295,4 @@ void measure_all(double *obs)
     obs[OBS_CHIRAL] = chiral;
     obs[OBS_CHIRAL_SQR] = chiral * chiral;
 }
+

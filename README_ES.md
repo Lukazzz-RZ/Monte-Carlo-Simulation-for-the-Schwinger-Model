@@ -79,3 +79,4 @@ CMakeLists.txt Compilación Windows/MSVC
 Este repositorio acompaña **_Worm Algorithms for the Schwinger Model_**, Trabajo de Fin de Grado en Física, Universidad de Zaragoza (2025–2026). La formulación dual procede de trabajos previos de teoría de campos en el retículo; aquí se comparte su implementación y estudio numérico.
 
 Se añadirá el enlace a la memoria completa en Zaguán o arXiv cuando esté disponible públicamente.
+
