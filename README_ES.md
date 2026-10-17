@@ -1,90 +1,81 @@
-# Simulación Monte Carlo del modelo dual de Schwinger
+# Simulación Monte Carlo del modelo de Schwinger
 
-[English](README.md)
+[English](README.md) · [Código fuente](src/) · [Compilación y prueba](.github/workflows/windows-build.yml)
 
-Implementación en C de algoritmos Monte Carlo para la representación dual del **modelo de Schwinger en 1+1 dimensiones**, desarrollada para un Trabajo de Fin de Grado en Física (Universidad de Zaragoza, curso 2025–2026).
+**Implementación en C de algoritmos Monte Carlo para el modelo de Schwinger en (1+1) dimensiones, en su formulación dual de monómeros, dímeros y lazos.** El proyecto se desarrolló como parte de un Trabajo de Fin de Grado en Física de la Universidad de Zaragoza (2025–2026) y estudia observables gauge y fermiónicos en función de la masa, el acoplamiento y el ángulo topológico.
 
-La formulación dual utiliza ocupaciones de plaqueta, lazos fermiónicos, dímeros y, en el caso masivo, monómeros. El estudio considera la dependencia de los observables con la masa fermiónica, el acoplamiento gauge y el ángulo topológico. En el caso masivo aparecen pesos con signo, cuya contribución se recupera mediante reponderación en el análisis.
+## Resultado representativo
 
-> **Software de investigación:** poder compilar el programa no constituye, por sí solo, una validación científica de los resultados Monte Carlo.
+![Mapa de calor de la respuesta topológica frente al ángulo y la masa](docs/figures/topological_response_heatmap.svg)
 
-## Resultado representativo del TFG
+*Estimador de la respuesta topológica ⟨q⟩ frente a θ/π y m/g, para β = 14,4 y una red de 12 × 12. Cada celda representa un ángulo muestreado para una de las cuatro masas discretas; **no se interpola entre masas**. La figura procede de [datos redondeados del TFG](docs/data/topological_response_preview.csv). Se omiten las barras de incertidumbre en esta vista general; la memoria contiene el análisis estadístico y la interpretación física. No corresponde al barrido predeterminado del código publicado actualmente.*
 
-![Densidad de respuesta topológica frente al ángulo para cuatro masas fermiónicas](docs/figures/topological_response.svg)
+## Características principales
 
-*Gráfica ilustrativa basada en los datos del TFG: respuesta topológica frente a θ/π para cuatro valores de m/g, con β = 14,4 y V = 12 × 12. Para facilitar la lectura se representa un punto de cada dos y se omiten las barras de incertidumbre; véase la memoria para los errores y su interpretación. [Datos de la vista previa](docs/data/topological_response_preview.csv). Estos resultados pertenecen al TFG y no corresponden a la prueba automática con los parámetros actuales del repositorio.*
+- **Formulación dual:** números de ocupación de plaqueta, lazos fermiónicos, dímeros y monómeros.
+- **Actualizaciones Monte Carlo:** movimientos locales de plaqueta y algoritmos de gusano abierto y cerrado.
+- **Observables:** plaqueta, densidades de dímeros y monómeros, estimador de respuesta topológica y condensado quiral.
+- **Reponderación del signo:** almacenamiento del signo y de los observables multiplicados por él para el posterior análisis.
+- **Comprobaciones automáticas:** compilación mediante CMake y prueba reducida en Windows con GitHub Actions.
 
-## Funcionalidad
+## Compilación y ejecución
 
-- Actualizaciones locales de plaqueta y algoritmos de gusano abierto y cerrado.
-- Medidas de la plaqueta, densidad de dímeros, respuesta topológica, densidad de monómeros y estimador del condensado quiral.
-- Registro del signo de cada configuración y de los observables multiplicados por el signo.
-- Series de termalización y barridos de parámetros.
+**Entorno compatible:** Windows, Visual Studio 2022 con *Desarrollo para el escritorio con C++* (MSVC y SDK de Windows), y CMake ≥ 3.20. El código usa funciones específicas de Windows como `rand_s`, `_mkdir` y `Sleep`; esta versión no ofrece compatibilidad con Linux o macOS.
 
-**Plataforma compatible en esta versión:** Windows con Visual Studio 2022 y MSVC. El código emplea rutinas específicas de Windows (`rand_s`, `_mkdir` y `Sleep`). No se anuncia compatibilidad con Linux o macOS.
-
-## Compilación
-
-Instala Visual Studio 2022 con «Desarrollo para el escritorio con C++» (compilador MSVC y SDK de Windows) y CMake 3.20 o superior.
-
-Abre una terminal de desarrollador en la raíz del repositorio y ejecuta:
+En una terminal de desarrollador de Visual Studio situada en la raíz:
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
-```
-
-Ejecuta el programa desde la raíz para generar los resultados en `Results/`:
-
-```powershell
 .\build\Release\SchwingerWorm.exe
 ```
 
-**Importante:** el `src/Main.c` actualmente publicado **no tiene menú interactivo**: comienza directamente el barrido configurado. Los parámetros por defecto producen una simulación extensa.
+**Importante:** el ejecutable comienza directamente el barrido de parámetros configurado en `src/Main.c`; **no** muestra un menú interactivo. Los parámetros originales requieren un tiempo de cálculo considerable.
 
-## Parámetros de la versión actual
+### Parámetros predeterminados
 
-| Parámetro | Valor predeterminado |
+| Parámetro | Valor |
 | --- | --- |
-| Tamaño del retículo | `Nx = Nt = 10`, en `include/Lattice.h` |
-| Acoplamiento | `beta = 10` |
+| Tamaño del retículo | `Nx = Nt = 10` |
+| Acoplamiento gauge | `β = 10` |
 | Masa | `m/g = 1` |
-| Ángulo | `theta/pi = 0, 0.25, ..., 2` |
+| Ángulos topológicos | `θ/π = 0; 0,25; …; 2` |
 | Termalización | 100 000 pasos Monte Carlo por punto |
-| Medidas | 50 176 medidas por punto |
-| Separación entre medidas | 10 pasos Monte Carlo |
+| Medidas | 50 176 por punto |
+| Separación entre medidas | 10 pasos |
 
-Para una prueba pequeña, modifica los parámetros en `src/Main.c` y recompila. Un paso Monte Carlo consta de un barrido de plaquetas, `max(1, V/10)` intentos de gusano y otro barrido de plaquetas.
+Los parámetros y barridos se definen en [`src/Main.c`](src/Main.c) y las dimensiones de la red en [`include/Lattice.h`](include/Lattice.h). Para un experimento más corto, modifica las constantes y recompila. Un paso Monte Carlo comprende un barrido de plaquetas, `max(1, V/10)` intentos de gusano y un segundo barrido.
 
-La semilla aleatoria se obtiene del reloj del sistema; esta versión no ofrece una opción de semilla fija. No se garantiza que dos ejecuciones produzcan resultados idénticos bit a bit.
+## Resultados generados
 
-## Resultados
+Al ejecutarlo desde la raíz se crea `Results/` con los siguientes archivos:
 
-El programa crea `Results/` en el directorio desde el que se ejecuta:
+| Archivo | Contenido |
+| --- | --- |
+| `Series_*.dat` | Parámetros, paso Monte Carlo, diez observables, signo de configuración y diez observables multiplicados por el signo |
+| `Thermalization_*.txt` | Evolución de la plaqueta media y la densidad de dímeros durante la termalización |
 
-- `Series_*.dat`: metadatos, paso Monte Carlo, diez observables, signo de configuración y diez observables reponderados con el signo.
-- `Thermalization_*.txt`: evolución de la plaqueta media y la densidad de dímeros durante la termalización.
+Son **medidas brutas**, no estimaciones estadísticas finales. En particular, los valores `q` y `q²` no constituyen por sí solos la susceptibilidad topológica definida por la curvatura de la energía libre: debe tenerse en cuenta su término de derivada explícita.
 
-Estos archivos contienen medidas brutas. El análisis jackknife y las incertidumbres estadísticas requieren un posprocesado apropiado. Los datos `q` y `q^2` no constituyen necesariamente un estimador completo de la susceptibilidad como curvatura de la energía libre; puede ser necesario incluir una derivada explícita.
+## Validación y reproducibilidad
+
+El [flujo automático de Windows](.github/workflows/windows-build.yml) comprueba la compilación con MSVC y la ejecución de una **simulación acortada** sobre una copia temporal del código. Verifica que se obtienen medidas finitas y archivos con la estructura esperada; véase [`scripts/smoke-test.ps1`](scripts/smoke-test.ps1).
+
+Es una **prueba técnica**, no una demostración de ergodicidad ni de corrección física de los resultados. El generador se inicializa actualmente con la hora del sistema y no ofrece una opción de semilla fija.
 
 ## Estructura
 
 ```text
-.
-├── CMakeLists.txt
-├── include/Lattice.h
-├── src/
-│   ├── Main.c
-│   ├── Initializer.c
-│   ├── UpdCore.c
-│   ├── Plaq_mod.c
-│   ├── Worm_ferm.c
-│   ├── Measures.c
-│   ├── Visualizer.c
-│   └── Other.c
-└── README.md
+include/       Cabeceras y parámetros del retículo
+src/           Código C: actualizaciones, medidas, inicialización y salida
+docs/data/     Datos redondeados de la figura del README
+docs/figures/  Figuras ilustrativas
+scripts/       Prueba corta aislada
+CMakeLists.txt Compilación Windows/MSVC
 ```
 
-## Memoria
+## Contexto académico
 
-**Worm Algorithms for the Schwinger Model**, Trabajo de Fin de Grado en Física, Universidad de Zaragoza (2025–2026). Los enlaces a Zaguán o arXiv se incorporarán cuando estén disponibles. La formulación dual procede de trabajos previos; el objetivo de este repositorio es documentar la implementación y el estudio numérico.
+Este repositorio acompaña **_Worm Algorithms for the Schwinger Model_**, Trabajo de Fin de Grado en Física, Universidad de Zaragoza (2025–2026). La formulación dual procede de trabajos previos de teoría de campos en el retículo; aquí se comparte su implementación y estudio numérico.
+
+Se añadirá el enlace a la memoria completa en Zaguán o arXiv cuando esté disponible públicamente.
